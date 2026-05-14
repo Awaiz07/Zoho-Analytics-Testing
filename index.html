@@ -6,37 +6,32 @@
   <title>FIP-AA Integration Dashboard</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    
+
     body {
       font-family: Arial, sans-serif;
       background: #f0f4f8;
     }
-
     .header {
       background: #1F4E79;
       color: white;
       padding: 16px 20px;
       text-align: center;
     }
-
     .header h1 {
       font-size: 18px;
       font-weight: bold;
     }
-
     .header p {
       font-size: 12px;
       opacity: 0.8;
       margin-top: 4px;
     }
-
     .dashboard-wrapper {
       position: relative;
       width: 100%;
       overflow: hidden;
       padding-top: 75%;
     }
-
     .dashboard-wrapper iframe {
       position: absolute;
       top: 0;
@@ -45,20 +40,10 @@
       height: 100%;
       border: none;
     }
-
-    /* Mobile adjustments */
+    /* Mobile: extra height so all reports including master table title are visible */
     @media (max-width: 768px) {
       .header h1 { font-size: 15px; }
-      .dashboard-wrapper { padding-top: 150%; }
-    }
-
-    .footer {
-      text-align: center;
-      padding: 12px;
-      font-size: 11px;
-      color: #888;
-      background: white;
-      border-top: 1px solid #ddd;
+      .dashboard-wrapper { padding-top: 220%; }
     }
   </style>
 </head>
@@ -66,20 +51,15 @@
 
   <div class="header">
     <h1>FIP–AA Integration Analytics Dashboard</h1>
-    <p>Sahamati  |  Updated daily at 09:55 IST</p>
+    <p>Sahamati &nbsp;|&nbsp; Updated daily at 09:55 IST</p>
   </div>
 
   <div class="dashboard-wrapper">
     <iframe
-      src=https://analytics.zoho.in/open-view/211349000006251247/d787ff205ec11fd8304a3e1372ca4136f407a062b2a18ddd79810dbfcbf88018
+      src="https://analytics.zoho.in/open-view/211349000006251247/d787ff205ec11fd8304a3e1372ca4136f407a062b2a18ddd79810dbfcbf88018"
       allowfullscreen>
     </iframe>
   </div>
 
-  <div class="footer">
-    Powered by Zoho Analytics  |  Sahamati © 2026
-  </div>
-
 </body>
 </html>
-
