@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,42 +36,46 @@
       background: #EBF5FB;
       border-left: 4px solid #2E75B6;
       padding: 10px 16px;
-      font-size: 12px;
+      font-size: 13px;
       color: #1A5276;
+      line-height: 1.5;
     }
     @media (max-width: 900px) {
       .mobile-notice { display: block; }
       .header h1 { font-size: 15px; }
     }
 
-    /* ── Dashboard wrapper ── */
-    /*
-      On desktop  : fills 100% width, height tracks aspect ratio via padding-top.
-      On mobile   : JS scales the 1200-wide iframe down to fit screen width,
-                    then sets wrapper height to match the scaled result.
-    */
+    /* ── DESKTOP: aspect-ratio wrapper ── */
     .dashboard-wrapper {
       position: relative;
       width: 100%;
       overflow: hidden;
-      /* Desktop aspect ratio — adjust if your dashboard is taller/shorter */
       padding-top: 72%;
       background: #f0f4f8;
     }
-
     .dashboard-wrapper iframe {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       border: none;
-      transform-origin: top left;
     }
 
-    /* When JS kicks in for mobile, wrapper switches to fixed height */
-    .dashboard-wrapper.scaled {
-      padding-top: 0;
+    /* ── MOBILE: horizontal scroll at natural size so text is readable ── */
+    @media (max-width: 900px) {
+      .dashboard-wrapper {
+        padding-top: 0;
+        overflow-x: auto;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
+        height: auto;
+      }
+      .dashboard-wrapper iframe {
+        position: relative;
+        top: auto; left: auto;
+        width: 1200px;    /* Zoho dashboard natural width */
+        height: 2800px;   /* tall enough for all 5 reports + master table */
+        display: block;
+      }
     }
   </style>
 </head>
@@ -84,74 +87,15 @@
   </div>
 
   <div class="mobile-notice">
-    📱 For the best experience, view on a tablet or desktop.
-    Rotate your phone to landscape for a wider view.
+    📱 Scroll left/right to see the full dashboard. For the best experience, view on a tablet or desktop.
   </div>
 
-  <div class="dashboard-wrapper" id="dashWrapper">
+  <div class="dashboard-wrapper">
     <iframe
-      id="dashFrame"
       src="https://analytics.zoho.in/open-view/211349000006251247/d787ff205ec11fd8304a3e1372ca4136f407a062b2a18ddd79810dbfcbf88018"
       allowfullscreen>
     </iframe>
   </div>
 
-  <script>
-    /*
-      Zoho Analytics dashboards are designed for ~1200px width.
-      On screens narrower than that, we:
-        1. Fix the iframe at 1200 × 900 px (its natural size)
-        2. Scale it down proportionally so it fits the screen
-        3. Set the wrapper height to match the scaled iframe height
-      On desktop (≥ 1200px), we leave the CSS aspect-ratio approach in place.
-    */
-
-    const DASHBOARD_WIDTH  = 1200;  // px — Zoho dashboard natural width
-    const DASHBOARD_HEIGHT = 900;   // px — Zoho dashboard natural height
-
-    const wrapper = document.getElementById('dashWrapper');
-    const iframe  = document.getElementById('dashFrame');
-
-    function scaleDashboard() {
-      const screenW = window.innerWidth;
-
-      if (screenW < DASHBOARD_WIDTH) {
-        // Mobile / small tablet — scale down
-        const scale = screenW / DASHBOARD_WIDTH;
-        const scaledHeight = DASHBOARD_HEIGHT * scale;
-
-        iframe.style.position      = 'absolute';
-        iframe.style.top           = '0';
-        iframe.style.left          = '0';
-        iframe.style.width         = DASHBOARD_WIDTH + 'px';
-        iframe.style.height        = DASHBOARD_HEIGHT + 'px';
-        iframe.style.transform     = 'scale(' + scale + ')';
-        iframe.style.transformOrigin = 'top left';
-
-        wrapper.classList.add('scaled');
-        wrapper.style.height = scaledHeight + 'px';
-      } else {
-        // Desktop — reset to CSS aspect-ratio approach
-        iframe.style.position      = 'absolute';
-        iframe.style.top           = '0';
-        iframe.style.left          = '0';
-        iframe.style.width         = '100%';
-        iframe.style.height        = '100%';
-        iframe.style.transform     = 'none';
-
-        wrapper.classList.remove('scaled');
-        wrapper.style.height = '';
-      }
-    }
-
-    // Run on load and on every resize / orientation change
-    scaleDashboard();
-    window.addEventListener('resize', scaleDashboard);
-    window.addEventListener('orientationchange', function () {
-      setTimeout(scaleDashboard, 300); // small delay for orientation to settle
-    });
-  </script>
-
 </body>
 </html>
-
